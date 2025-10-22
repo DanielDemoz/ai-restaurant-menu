@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Restaurant Menu - Demo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="2" fill="white" opacity="0.1"/></svg>');
+            animation: float 20s linear infinite;
+        }
+
+        @keyframes float {
+            from { transform: translateY(0); }
+            to { transform: translateY(-100px); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            max-width: 900px;
+        }
+
+        .logo-large {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 2rem;
+            background: white;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: bounce 2s ease infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .tagline {
+            font-size: 1.5rem;
+            margin-bottom: 3rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1.25rem 3rem;
+            background: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.25rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            margin: 0.5rem;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+        }
+
+        .cta-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .features {
+            background: white;
+            padding: 5rem 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #2D3748;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.25rem;
+            color: #718096;
+            margin-bottom: 4rem;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 2.5rem;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+
+        .feature-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #2D3748;
+        }
+
+        .feature-desc {
+            color: #4A5568;
+            line-height: 1.6;
+        }
+
+        .demo-section {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 5rem 2rem;
+            color: white;
+            text-align: center;
+        }
+
+        .demo-video {
+            max-width: 900px;
+            margin: 3rem auto;
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .browser-mockup {
+            background: #2D3748;
+            border-radius: 10px 10px 0 0;
+            padding: 0.75rem;
+            margin-bottom: 0;
+        }
+
+        .browser-dots {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .dot-red { background: #FF5F56; }
+        .dot-yellow { background: #FFBD2E; }
+        .dot-green { background: #27C93F; }
+
+        .screenshot {
+            width: 100%;
+            border-radius: 0 0 10px 10px;
+            display: block;
+        }
+
+        .stats {
+            background: #2D3748;
+            padding: 4rem 2rem;
+            color: white;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #F093FB;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1.125rem;
+            opacity: 0.9;
+        }
+
+        .how-it-works {
+            background: #F7FAFC;
+            padding: 5rem 2rem;
+        }
+
+        .steps {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .step {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            align-items: center;
+        }
+
+        .step-number {
+            min-width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .step-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #2D3748;
+        }
+
+        .step-content p {
+            color: #4A5568;
+            line-height: 1.6;
+        }
+
+        .footer {
+            background: #1A202C;
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .footer a {
+            color: #F093FB;
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .tagline { font-size: 1.125rem; }
+            .feature-grid { grid-template-columns: 1fr; }
+            .step { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="logo-large">
+                <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+                    <circle cx="40" cy="40" r="35" fill="#FF6B6B" opacity="0.2"/>
+                    <path d="M40 20 L52 32 L40 44 L28 32 Z" fill="#FF6B6B"/>
+                    <path d="M40 36 L52 48 L40 60 L28 48 Z" fill="#FF6B6B" opacity="0.6"/>
+                </svg>
+            </div>
+            <h1>🍽️ AI Restaurant Menu</h1>
+            <p class="tagline">Transform dining with intelligent menu assistance</p>
+            <div>
+                <a href="index.html" class="cta-button">🚀 Try Live Demo</a>
+                <a href="#features" class="cta-button cta-secondary">📖 Learn More</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2 class="section-title">Why Choose AI Menu?</h2>
+            <p class="section-subtitle">Everything you need for a modern dining experience</p>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">🤖</span>
+                    <h3 class="feature-title">AI Assistant</h3>
+                    <p class="feature-desc">Smart chatbot helps customers find perfect dishes based on preferences, dietary needs, and allergies</p>
+                </div>
+
+                <div class="feature-card">
+                    <span class="feature-icon">🎨</span>
+                    <h3 class="feature-title">Beautiful Design</h3>
+                    <p class="feature-desc">Modern, responsive interface that looks stunning on any device - phone, tablet, or desktop</p>
+                </div>
+
+                <div class="feature-card">
+                    <span class="feature-icon">🔍</span>
+                    <h3 class="feature-title">Smart Search</h3>
+                    <p class="feature-desc">Powerful filtering by dietary preferences: vegan, vegetarian, gluten-free, and more</p>
+                </div>
+
+                <div class="feature-card">
+                    <span class="feature-icon">🛒</span>
+                    <h3 class="feature-title">Easy Ordering</h3>
+                    <p class="feature-desc">Intuitive cart system with real-time pricing, quantity controls, and tax calculation</p>
+                </div>
+
+                <div class="feature-card">
+                    <span class="feature-icon">⚡</span>
+                    <h3 class="feature-title">Lightning Fast</h3>
+                    <p class="feature-desc">Instant loading, smooth animations, and seamless navigation for the best experience</p>
+                </div>
+
+                <div class="feature-card">
+                    <span class="feature-icon">🔧</span>
+                    <h3 class="feature-title">Easy to Customize</h3>
+                    <p class="feature-desc">Simple to update menu items, prices, images, and branding to match your restaurant</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section class="demo-section">
+        <div class="container">
+            <h2 class="section-title" style="color: white;">See It In Action</h2>
+            <p class="section-subtitle" style="color: rgba(255,255,255,0.9);">Experience the future of restaurant menus</p>
+            
+            <div class="demo-video">
+                <div class="browser-mockup">
+                    <div class="browser-dots">
+                        <div class="dot dot-red"></div>
+                        <div class="dot dot-yellow"></div>
+                        <div class="dot dot-green"></div>
+                    </div>
+                </div>
+                <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=900&h=600&fit=crop" alt="Restaurant Demo" class="screenshot">
+            </div>
+
+            <a href="index.html" class="cta-button">🎮 Try Interactive Demo</a>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat">
+                <div class="stat-number">100%</div>
+                <div class="stat-label">Mobile Friendly</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">AI Available</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">∞</div>
+                <div class="stat-label">Customization</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">0</div>
+                <div class="stat-label">Setup Cost</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <div class="container">
+            <h2 class="section-title">How It Works</h2>
+            <p class="section-subtitle">Get started in 3 simple steps</p>
+
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Browse Menu</h3>
+                        <p>Customers explore beautiful menu items with high-quality images, detailed descriptions, and pricing. Filter by dietary preferences or search for specific dishes.</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Ask AI Assistant</h3>
+                        <p>Not sure what to order? Chat with the AI assistant! Ask about vegan options, allergens, popular dishes, or get personalized recommendations.</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Place Order</h3>
+                        <p>Add items to cart, adjust quantities, review total with tax, and place order. Simple, fast, and user-friendly checkout process.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Details -->
+    <section class="features" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+        <div class="container">
+            <h2 class="section-title" style="color: white;">Perfect For</h2>
+            <p class="section-subtitle" style="color: rgba(255,255,255,0.9);">Multiple use cases and industries</p>
+
+            <div class="feature-grid">
+                <div class="feature-card" style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); color: white;">
+                    <span class="feature-icon">🍽️</span>
+                    <h3 class="feature-title" style="color: white;">Restaurants</h3>
+                    <p class="feature-desc" style="color: rgba(255,255,255,0.9);">Fine dining, casual, or fast food - perfect for any restaurant type</p>
+                </div>
+
+                <div class="feature-card" style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); color: white;">
+                    <span class="feature-icon">☕</span>
+                    <h3 class="feature-title" style="color: white;">Cafes & Bars</h3>
+                    <p class="feature-desc" style="color: rgba(255,255,255,0.9);">Coffee shops, juice bars, and cocktail lounges</p>
+                </div>
+
+                <div class="feature-card" style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); color: white;">
+                    <span class="feature-icon">🚚</span>
+                    <h3 class="feature-title" style="color: white;">Food Trucks</h3>
+                    <p class="feature-desc" style="color: rgba(255,255,255,0.9);">Mobile-first design perfect for food trucks and pop-ups</p>
+                </div>
+
+                <div class="feature-card" style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); color: white;">
+                    <span class="feature-icon">🏨</span>
+                    <h3 class="feature-title" style="color: white;">Hotels</h3>
+                    <p class="feature-desc" style="color: rgba(255,255,255,0.9);">Room service, restaurant menus, and catering services</p>
+                </div>
+
+                <div class="feature-card" style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); color: white;">
+                    <span class="feature-icon">🎉</span>
+                    <h3 class="feature-title" style="color: white;">Catering</h3>
+                    <p class="feature-desc" style="color: rgba(255,255,255,0.9);">Handle dietary restrictions and preferences effortlessly</p>
+                </div>
+
+                <div class="feature-card" style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); color: white;">
+                    <span class="feature-icon">🏫</span>
+                    <h3 class="feature-title" style="color: white;">Cafeterias</h3>
+                    <p class="feature-desc" style="color: rgba(255,255,255,0.9);">School, office, or hospital cafeterias with diverse needs</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="demo-section" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+        <div class="container">
+            <h2 class="section-title" style="color: white; font-size: 3rem;">Ready to Revolutionize Your Menu?</h2>
+            <p class="section-subtitle" style="color: rgba(255,255,255,0.9); font-size: 1.5rem;">Start using AI Menu today - it's free and open source!</p>
+            
+            <div style="margin-top: 3rem;">
+                <a href="index.html" class="cta-button" style="font-size: 1.5rem; padding: 1.5rem 4rem;">🚀 Launch Demo Now</a>
+            </div>
+
+            <div style="margin-top: 3rem; opacity: 0.9;">
+                <p style="font-size: 1.125rem;">✅ No credit card required</p>
+                <p style="font-size: 1.125rem;">✅ Works without API keys</p>
+                <p style="font-size: 1.125rem;">✅ Fully customizable</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <section class="footer">
+        <div class="container">
+            <p style="font-size: 1.125rem; margin-bottom: 1rem;">Built with ❤️ for restaurants everywhere</p>
+            <p style="opacity: 0.7;">Open Source • Free to Use • Easy to Customize</p>
+            <p style="margin-top: 2rem; opacity: 0.5; font-size: 0.875rem;">© 2025 AI Restaurant Menu. All rights reserved.</p>
+        </div>
+    </section>
+
+    <script>
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
+

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Restaurant Menu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                        <circle cx="20" cy="20" r="18" fill="#FF6B6B" opacity="0.2"/>
+                        <path d="M20 10 L26 16 L20 22 L14 16 Z" fill="#FF6B6B"/>
+                        <path d="M20 18 L26 24 L20 30 L14 24 Z" fill="#FF6B6B" opacity="0.6"/>
+                    </svg>
+                    <h1>La Cucina AI</h1>
+                </div>
+                <nav class="nav">
+                    <button class="nav-btn active" data-view="menu">Menu</button>
+                    <button class="nav-btn" data-view="cart">Cart (<span id="cart-count">0</span>)</button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <!-- Menu View -->
+            <div id="menu-view" class="view active">
+                <!-- Search and Filters -->
+                <div class="filters-section">
+                    <div class="search-box">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="2"/>
+                            <path d="M14 14 L19 19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <input type="text" id="search-input" placeholder="Search menu items...">
+                    </div>
+                    
+                    <div class="filter-chips">
+                        <button class="filter-chip active" data-filter="all">All</button>
+                        <button class="filter-chip" data-filter="vegetarian">Vegetarian</button>
+                        <button class="filter-chip" data-filter="vegan">Vegan</button>
+                        <button class="filter-chip" data-filter="gluten-free">Gluten-Free</button>
+                        <button class="filter-chip" data-filter="popular">Popular</button>
+                    </div>
+                </div>
+
+                <!-- Menu Categories -->
+                <div id="menu-container" class="menu-container">
+                    <!-- Menu items will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Cart View -->
+            <div id="cart-view" class="view">
+                <div class="cart-container">
+                    <h2 class="cart-title">Your Order</h2>
+                    <div id="cart-items" class="cart-items">
+                        <!-- Cart items will be loaded here -->
+                    </div>
+                    <div class="cart-empty" id="cart-empty">
+                        <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+                            <circle cx="40" cy="40" r="35" stroke="#ddd" stroke-width="2"/>
+                            <path d="M25 35 L35 45 L55 25" stroke="#ddd" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <p>Your cart is empty</p>
+                        <button class="btn btn-primary" onclick="switchView('menu')">Browse Menu</button>
+                    </div>
+                    <div class="cart-summary" id="cart-summary" style="display: none;">
+                        <div class="summary-row">
+                            <span>Subtotal:</span>
+                            <span id="subtotal">$0.00</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Tax (8%):</span>
+                            <span id="tax">$0.00</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span>Total:</span>
+                            <span id="total">$0.00</span>
+                        </div>
+                        <button class="btn btn-primary btn-large" onclick="checkout()">Place Order</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- AI Chat Button -->
+    <button class="chat-toggle" id="chat-toggle" onclick="toggleChat()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2C6.48 2 2 6.48 2 12C2 13.89 2.53 15.67 3.44 17.17L2 22L6.83 20.56C8.33 21.47 10.11 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2Z" fill="white"/>
+            <circle cx="8" cy="12" r="1.5" fill="#FF6B6B"/>
+            <circle cx="12" cy="12" r="1.5" fill="#FF6B6B"/>
+            <circle cx="16" cy="12" r="1.5" fill="#FF6B6B"/>
+        </svg>
+        <span class="chat-badge">AI</span>
+    </button>
+
+    <!-- AI Chat Panel -->
+    <div class="chat-panel" id="chat-panel">
+        <div class="chat-header">
+            <div>
+                <h3>AI Menu Assistant</h3>
+                <p class="chat-subtitle">Ask me anything about our menu!</p>
+            </div>
+            <button class="chat-close" onclick="toggleChat()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M18 6 L6 18 M6 6 L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </button>
+        </div>
+        
+        <div class="chat-messages" id="chat-messages">
+            <div class="message bot-message">
+                <div class="message-content">
+                    👋 Hello! I'm your AI menu assistant. I can help you find the perfect dish based on your preferences, dietary restrictions, or allergens. What would you like to know?
+                </div>
+            </div>
+        </div>
+        
+        <div class="chat-quick-questions">
+            <button class="quick-question" onclick="sendQuickQuestion('What are your most popular dishes?')">
+                Most Popular
+            </button>
+            <button class="quick-question" onclick="sendQuickQuestion('What vegan options do you have?')">
+                Vegan Options
+            </button>
+            <button class="quick-question" onclick="sendQuickQuestion('Do you have gluten-free dishes?')">
+                Gluten-Free
+            </button>
+        </div>
+        
+        <div class="chat-input-container">
+            <input 
+                type="text" 
+                id="chat-input" 
+                class="chat-input" 
+                placeholder="Ask about menu, dietary needs, allergens..."
+                onkeypress="handleChatKeyPress(event)"
+            >
+            <button class="chat-send" onclick="sendMessage()">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M2 10 L18 2 L11 10 L18 18 L2 10 Z M11 10 L11 18" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Item Modal -->
+    <div class="modal" id="item-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M18 6 L6 18 M6 6 L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </button>
+            <div id="modal-body">
+                <!-- Modal content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
+
+
