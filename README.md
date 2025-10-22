@@ -87,6 +87,9 @@ PORT=3000
 
 ## Customization
 
+> **🚀 Quick Start:** See [QUICK_CUSTOMIZE.md](QUICK_CUSTOMIZE.md) for 5-minute setup  
+> **📖 Full Guide:** See [CUSTOMIZATION_GUIDE.md](CUSTOMIZATION_GUIDE.md) for complete customization
+
 ### Update Menu Items
 
 Edit `server.js` and modify the `menuData` object:
