@@ -1,10 +1,10 @@
-# 🚀 Quick Customization (5 Minutes)
+# Quick Customization
 
 Want to adapt this for another restaurant? Change these 3 things:
 
 ---
 
-## 1️⃣ Restaurant Name (2 minutes)
+## 1️⃣ Restaurant Name 
 
 ### Search & Replace "Brukd" with your restaurant name in:
 - `package.json`
@@ -17,7 +17,7 @@ Want to adapt this for another restaurant? Change these 3 things:
 
 ---
 
-## 2️⃣ Menu Items (2 minutes)
+## 2️⃣ Menu Items 
 
 ### Edit `server.js` - Find the `menuData` object (starts around line 25)
 
@@ -42,7 +42,7 @@ Replace the example items with your menu:
 
 ---
 
-## 3️⃣ Brand Color (1 minute)
+## 3️⃣ Brand Color 
 
 ### Edit `public/styles.css` - Find `:root` section (line 9)
 
@@ -63,7 +63,7 @@ Replace the example items with your menu:
 
 ---
 
-## ✅ Test It
+## Test It
 
 ```bash
 npm start
@@ -73,7 +73,7 @@ Open `http://localhost:3000` and check if everything looks right!
 
 ---
 
-## 📤 Push to GitHub
+## Push to GitHub
 
 ```bash
 git add .
@@ -83,7 +83,7 @@ git push origin main
 
 ---
 
-## 🎯 Done!
+## Done!
 
 That's it! Your custom restaurant menu is ready.
 
