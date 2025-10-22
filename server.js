@@ -370,11 +370,11 @@ function createMenuContext(menuData) {
 }
 
 app.listen(PORT, () => {
-  console.log(`🍽️  AI Restaurant Menu Server running on http://localhost:${PORT}`);
-  console.log(`📱 Open your browser to view the menu`);
+  console.log(`Brukd Menu Server running on http://localhost:${PORT}`);
+  console.log(`Open your browser to view the menu`);
   if (!process.env.OPENAI_API_KEY) {
-    console.log(`⚠️  OpenAI API key not found. Using fallback AI responses.`);
-    console.log(`   Add OPENAI_API_KEY to .env file for full AI features.`);
+    console.log(`OpenAI API key not found. Using fallback AI responses.`);
+    console.log(`Add OPENAI_API_KEY to .env file for full AI features.`);
   }
 });
 

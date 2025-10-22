@@ -1,183 +1,138 @@
-# 🍽️ AI-Assisted Restaurant Menu
+# Brukd - AI-Powered Restaurant Menu
 
-A modern, interactive restaurant menu system with AI-powered assistance for dish recommendations, dietary restrictions, and allergen information.
+A modern, intelligent restaurant menu system with AI assistance for dietary recommendations and allergen information.
 
-> **🎯 Want to present this to others?** Start with **[START_HERE.md](START_HERE.md)** for a simple, audience-friendly guide!
+[![Live Demo](https://img.shields.io/badge/demo-live-success)](https://danieldemoz.github.io/ai-restaurant-menu/)
+[![Node.js](https://img.shields.io/badge/node-%3E%3D14.0.0-brightgreen)](https://nodejs.org/)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-## ✨ Features
+## Features
 
-### 🎨 Beautiful UI
-- Modern, responsive design
-- Smooth animations and transitions
-- Mobile-friendly interface
-- High-quality food images
+### Smart Menu System
+- Modern, responsive interface
+- Real-time search and filtering
+- Dietary preference filters (vegan, vegetarian, gluten-free)
+- High-quality food imagery
+- Mobile-optimized design
 
-### 🤖 AI Assistant
-- Personalized dish recommendations
-- Dietary restriction support (vegan, vegetarian, gluten-free)
+### AI Assistant
+- Natural language menu queries
+- Dietary restriction support
 - Allergen information
-- Ingredient details
-- Smart menu suggestions
-- Works with or without OpenAI API key (fallback system included)
+- Personalized recommendations
+- Works with or without OpenAI API (intelligent fallback system)
 
-### 🛒 Interactive Menu
-- Browse by categories (Appetizers, Mains, Desserts, Drinks)
-- Search functionality
-- Filter by dietary preferences
-- Popular items highlighted
-- Detailed item information
-
-### 🛍️ Shopping Cart
-- Add/remove items
-- Quantity management
+### Easy Ordering
+- Interactive shopping cart
 - Real-time price calculation
-- Tax calculation
-- Easy checkout
+- Tax computation
+- Quantity management
 
-## 🎯 Quick Links
-
-- **🚀 [Start Here](#-getting-started)** - Setup instructions
-- **🎬 [Present This](SIMPLE_DEMO_SCRIPT.md)** - 2-minute demo script
-- **📊 [Presentation Guide](PRESENTATION.md)** - Full presentation materials
-- **💼 [Pitch Deck](PITCH_DECK.md)** - Business pitch
-- **📄 [Handout](HANDOUT.md)** - One-page reference
-
----
-
-## 🚀 Getting Started
+## Quick Start
 
 ### Prerequisites
-- Node.js (v14 or higher)
+- Node.js v14 or higher
 - npm
-
-> **⚠️ Don't have Node.js?** Read **[SETUP_GUIDE.md](SETUP_GUIDE.md)** for easy installation instructions!
 
 ### Installation
 
-1. **Clone or navigate to the project directory:**
-   ```bash
-   cd Menu
-   ```
+```bash
+# Clone the repository
+git clone https://github.com/DanielDemoz/ai-restaurant-menu.git
+cd ai-restaurant-menu
 
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
+# Install dependencies
+npm install
 
-3. **Configure environment (optional):**
-   
-   For full AI features with OpenAI:
-   ```bash
-   cp .env.example .env
-   ```
-   
-   Edit `.env` and add your OpenAI API key:
-   ```
-   OPENAI_API_KEY=your_actual_api_key_here
-   ```
-   
-   **Note:** The app works perfectly without an API key using intelligent fallback responses!
+# Start the server
+npm start
+```
 
-4. **Start the server:**
-   ```bash
-   npm start
-   ```
+Open your browser to `http://localhost:3000`
 
-5. **Open your browser:**
-   ```
-   http://localhost:3000
-   ```
-   
-   You'll see:
-   - **Main page**: Beautiful landing page (`demo.html`)
-   - **Menu App**: Click "Try Live Demo" or go to `/index.html`
+## Configuration
 
-## 📱 Usage
+### Optional: OpenAI Integration
+
+For enhanced AI features, create a `.env` file:
+
+```env
+OPENAI_API_KEY=your_api_key_here
+PORT=3000
+```
+
+**Note:** The system works perfectly without an API key using built-in intelligent responses.
+
+## Usage
 
 ### Browse Menu
-- View all menu items organized by category
-- Click on items for detailed information
-- Use search to find specific dishes
+- View items organized by category
+- Click items for detailed information
 - Filter by dietary preferences
+- Search for specific dishes
 
 ### AI Assistant
-- Click the AI chat button (bottom right)
+- Click the chat button (bottom right)
 - Ask questions like:
   - "What are your most popular dishes?"
-  - "Do you have vegan options?"
-  - "I'm allergic to dairy, what can I eat?"
-  - "Recommend something spicy"
-  - "What's good for dinner under $20?"
+  - "I'm vegan, what can I eat?"
+  - "Do you have gluten-free options?"
+  - "I'm allergic to dairy, what do you recommend?"
 
 ### Order
 - Add items to cart
 - Adjust quantities
-- Review your order
-- Place order
+- Review total with tax
+- Complete checkout
 
-## 🔧 Customization
+## Customization
 
-### Adding Menu Items
+### Update Menu Items
 
 Edit `server.js` and modify the `menuData` object:
 
 ```javascript
 {
   id: 13,
-  name: 'Your Dish Name',
-  description: 'Delicious description',
+  name: 'Your Dish',
+  description: 'Description here',
   price: 19.99,
-  image: 'https://image-url.com/image.jpg',
-  dietary: ['vegetarian', 'gluten-free'],
-  allergens: ['nuts', 'dairy'],
+  image: 'image-url',
+  dietary: ['vegetarian'],
+  allergens: ['gluten'],
   ingredients: ['ingredient1', 'ingredient2'],
   spicy: false,
   popular: true
 }
 ```
 
-### Customizing Colors
+### Customize Branding
 
-Edit `public/styles.css` and modify the CSS variables:
+Edit `public/styles.css`:
 
 ```css
 :root {
-    --primary: #FF6B6B;      /* Main color */
+    --primary: #FF6B6B;      /* Brand color */
     --secondary: #4ECDC4;    /* Accent color */
     --background: #F7F7F7;   /* Background */
-    /* ... more variables */
 }
 ```
 
-### Database Integration
-
-For production, replace the in-memory `menuData` with a database:
-
-```javascript
-// Example with MongoDB
-const Menu = require('./models/Menu');
-
-app.get('/api/menu', async (req, res) => {
-  const menuData = await Menu.find();
-  res.json(menuData);
-});
-```
-
-## 🏗️ Architecture
+## Project Structure
 
 ```
-Menu/
+brukd-menu/
 ├── public/
-│   ├── index.html      # Main HTML structure
-│   ├── styles.css      # All styling
-│   └── app.js          # Frontend JavaScript
-├── server.js           # Express server & API
-├── package.json        # Dependencies
-├── .env.example        # Environment template
-└── README.md          # Documentation
+│   ├── index.html       # Main application
+│   ├── demo.html        # Landing page
+│   ├── styles.css       # Styling
+│   └── app.js           # Frontend logic
+├── server.js            # Express server + API
+├── package.json         # Dependencies
+└── README.md           # Documentation
 ```
 
-## 🔌 API Endpoints
+## API Endpoints
 
 ### GET `/api/menu`
 Returns complete menu data
@@ -187,6 +142,7 @@ Returns specific item details
 
 ### POST `/api/chat`
 AI chat endpoint
+
 ```json
 {
   "message": "What vegan options do you have?",
@@ -194,103 +150,82 @@ AI chat endpoint
 }
 ```
 
-## 🎯 Use Cases
+## Technology Stack
 
-- **Restaurants**: Digital menu with AI assistance
-- **Cafes**: Interactive ordering system
-- **Food Trucks**: Mobile-friendly menu
-- **Catering**: Dietary preference handling
-- **Hotels**: Room service menu
+- **Frontend:** Vanilla JavaScript, HTML5, CSS3
+- **Backend:** Node.js, Express
+- **AI:** OpenAI GPT (optional) with smart fallback
+- **Styling:** Custom CSS (no frameworks)
 
-## 🛠️ Tech Stack
+## Deployment
 
-- **Frontend**: Vanilla JavaScript, HTML5, CSS3
-- **Backend**: Node.js, Express
-- **AI**: OpenAI GPT (optional)
-- **Styling**: Custom CSS with CSS Grid & Flexbox
+### Heroku
 
-## 📝 Future Enhancements
+```bash
+# Login to Heroku
+heroku login
 
-- [ ] User accounts and order history
-- [ ] Payment integration (Stripe, PayPal)
-- [ ] Real-time order tracking
-- [ ] Admin dashboard for menu management
-- [ ] Multi-language support
-- [ ] Nutritional information
-- [ ] Image upload for menu items
-- [ ] Reviews and ratings
-- [ ] Table reservation system
-- [ ] Kitchen display system integration
+# Create app
+heroku create brukd-menu
 
-## 🤝 Contributing
+# Deploy
+git push heroku main
+```
 
-Feel free to fork this project and customize it for your needs!
+### Vercel
 
-## 📄 License
+```bash
+# Install Vercel CLI
+npm i -g vercel
 
-MIT License - feel free to use this for commercial or personal projects.
+# Deploy
+vercel
+```
 
-## 💡 Tips
+### GitHub Pages (Static Demo)
 
-- **Without OpenAI API**: The fallback system provides intelligent responses based on menu data
-- **With OpenAI API**: Get more natural, conversational AI assistance
-- **Customization**: Easily modify menu data, colors, and styling
-- **Mobile**: Fully responsive design works on all devices
+The demo page is automatically deployed to GitHub Pages at:
+https://danieldemoz.github.io/ai-restaurant-menu/
 
-## 🆘 Support
+## Performance
+
+- Lightweight (no heavy frameworks)
+- Fast loading times
+- Optimized for mobile
+- SEO-friendly
+- Accessible (WCAG compliant)
+
+## Browser Support
+
+- Chrome (recommended)
+- Firefox
+- Safari
+- Edge
+- Mobile browsers (iOS Safari, Chrome Mobile)
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/improvement`)
+3. Commit changes (`git commit -am 'Add new feature'`)
+4. Push to branch (`git push origin feature/improvement`)
+5. Create Pull Request
+
+## License
+
+MIT License - feel free to use for personal or commercial projects.
+
+## Support
 
 For issues or questions:
-1. Check the console for error messages
-2. Ensure the server is running (`npm start`)
-3. Verify Node.js version (v14+)
-4. Check that port 3000 is available
+- Open an issue on GitHub
+- Check existing documentation
+- Review the API endpoints
 
-## 🎯 Presenting to Others
+## Acknowledgments
 
-Want to showcase this to your team, clients, or in a presentation?
-
-### 📚 Presentation Resources:
-
-1. **[SIMPLE_DEMO_SCRIPT.md](SIMPLE_DEMO_SCRIPT.md)** - 2-minute demo script
-   - Perfect for quick presentations
-   - Step-by-step what to say and do
-   - Timing breakdown included
-
-2. **[PRESENTATION.md](PRESENTATION.md)** - Complete presentation guide
-   - Slides and talking points
-   - Different audience versions (business, technical, investors)
-   - Q&A preparation
-   - Video recording tips
-
-3. **[PITCH_DECK.md](PITCH_DECK.md)** - Business pitch deck
-   - Market opportunity
-   - Revenue models
-   - Competitive analysis
-   - Perfect for investors or stakeholders
-
-4. **[HANDOUT.md](HANDOUT.md)** - One-page quick reference
-   - Key features summary
-   - Sample conversations
-   - Pricing and setup info
-   - Print-friendly format
-
-### 🎬 Quick Demo Flow:
-
-1. Open `http://localhost:3000` (shows landing page)
-2. Click "Try Live Demo" (goes to actual app)
-3. Show menu browsing → filters → AI chat → cart
-4. Takes 2 minutes, impresses everyone! ✨
+Built with modern web technologies and AI integration to enhance the dining experience.
 
 ---
 
-## 🎉 Enjoy!
-
-You now have a professional, AI-powered restaurant menu system with complete presentation materials. Perfect for:
-- 💼 **Portfolio projects**
-- 🎓 **Class presentations**
-- 🏢 **Client demos**
-- 💰 **Investor pitches**
-- 🍽️ **Real restaurant deployments**
-
-Customize it to match your brand and start serving customers in style!
-
+**Brukd** - Smart dining, simplified.
