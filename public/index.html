@@ -107,38 +107,48 @@
     <!-- AI Chat Panel -->
     <div class="chat-panel" id="chat-panel">
         <div class="chat-header">
-            <div>
-                <h3>AI Menu Assistant</h3>
-                <p class="chat-subtitle">Ask me anything about our menu!</p>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <div>
+                    <h3>AI Menu Assistant</h3>
+                    <p class="chat-subtitle">Ask me anything about our menu!</p>
+                </div>
             </div>
-            <button class="chat-close" onclick="toggleChat()">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path d="M18 6 L6 18 M6 6 L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-            </button>
+            <div style="display: flex; gap: 0.5rem;">
+                <button class="speech-toggle" onclick="toggleSpeech()" title="Toggle voice">
+                    <span id="speech-icon">🔊</span>
+                </button>
+                <button class="chat-close" onclick="toggleChat()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M18 6 L6 18 M6 6 L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </div>
         </div>
         
         <div class="chat-messages" id="chat-messages">
             <div class="message bot-message">
                 <div class="message-content">
-                    👋 Hello! I'm your AI menu assistant. I can help you find the perfect dish based on your preferences, dietary restrictions, or allergens. What would you like to know?
+                    👋 Hey there! How's it going? I'm your friendly menu helper and I'm pretty excited to help you find something delicious today! What are you in the mood for?
                 </div>
             </div>
         </div>
         
         <div class="chat-quick-questions">
-            <button class="quick-question" onclick="sendQuickQuestion('What are your most popular dishes?')">
-                Most Popular
+            <button class="quick-question" onclick="sendQuickQuestion('What is on the menu?')">
+                What's on the Menu
             </button>
-            <button class="quick-question" onclick="sendQuickQuestion('What vegan options do you have?')">
-                Vegan Options
+            <button class="quick-question" onclick="sendQuickQuestion('What are today\'s specials?')">
+                Today's Specials
             </button>
-            <button class="quick-question" onclick="sendQuickQuestion('Do you have gluten-free dishes?')">
-                Gluten-Free
+            <button class="quick-question" onclick="sendQuickQuestion('What do you recommend?')">
+                Chef's Recommendations
             </button>
         </div>
         
         <div class="chat-input-container">
+            <button class="mic-button" id="mic-button" onclick="toggleVoiceInput()" title="Voice input">
+                🎤
+            </button>
             <input 
                 type="text" 
                 id="chat-input" 

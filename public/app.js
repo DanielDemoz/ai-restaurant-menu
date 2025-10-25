@@ -4,12 +4,17 @@ let cart = [];
 let conversationHistory = [];
 let currentFilter = 'all';
 let searchQuery = '';
+let speechEnabled = true; // Toggle for speech feature
+let speechSynthesis = window.speechSynthesis;
+let recognition = null; // Speech recognition
+let isListening = false;
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
     loadMenu();
     setupEventListeners();
     updateCartCount();
+    initializeSpeechRecognition();
 });
 
 // Event Listeners
@@ -327,7 +332,20 @@ function switchView(view) {
 // Chat Functions
 function toggleChat() {
     const panel = document.getElementById('chat-panel');
+    const wasActive = panel.classList.contains('active');
     panel.classList.toggle('active');
+    
+    // Speak welcome message when opening chat for the first time (Canadian style!)
+    if (!wasActive && speechEnabled) {
+        setTimeout(() => {
+            speakText("Hey there! How's it going? I'm your friendly menu helper and I'm pretty excited to help you find something delicious today! What are you in the mood for?");
+        }, 500);
+    }
+    
+    // Cancel speech when closing chat
+    if (wasActive && speechSynthesis) {
+        speechSynthesis.cancel();
+    }
 }
 
 async function sendMessage() {
@@ -361,6 +379,9 @@ async function sendMessage() {
         
         // Add bot response
         addChatMessage(data.response, 'bot');
+        
+        // Speak the response
+        speakText(data.response);
         
         // Update conversation history
         conversationHistory.push(
@@ -420,6 +441,209 @@ function removeChatLoading(id) {
 function handleChatKeyPress(event) {
     if (event.key === 'Enter') {
         sendMessage();
+    }
+}
+
+// Text-to-Speech Function
+function speakText(text) {
+    if (!speechEnabled || !speechSynthesis) return;
+    
+    // Cancel any ongoing speech
+    speechSynthesis.cancel();
+    
+    // Remove emojis from text before speaking
+    const cleanText = text.replace(/[\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\u{1F000}-\u{1F02F}]|[\u{1F0A0}-\u{1F0FF}]|[\u{1FA00}-\u{1FA6F}]|[\u{1FA70}-\u{1FAFF}]/gu, '').trim();
+    
+    // Create a new speech synthesis utterance
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+    
+    // Configure the voice settings for neutral, clear speech
+    utterance.rate = 1.0; // Neutral speaking pace
+    utterance.pitch = 1.0; // Neutral pitch
+    utterance.volume = 0.9; // Slightly softer for warmth
+    
+    // Try to find the most natural-sounding voice
+    const voices = speechSynthesis.getVoices();
+    
+    // Priority order for natural-sounding voices (Canadian preferred!)
+    const voicePreferences = [
+        // Canadian voices first!
+        'Google Canadian English',
+        'Google en-CA',
+        'Microsoft Heather',
+        'Microsoft Linda',
+        // Google voices (most natural)
+        'Google US English',
+        'Google UK English Female',
+        'Google UK English Male',
+        // Microsoft natural voices
+        'Microsoft Aria Online (Natural)',
+        'Microsoft Jenny Online (Natural)',
+        'Microsoft Guy Online (Natural)',
+        'Microsoft Zira Desktop',
+        // Apple voices (macOS/iOS)
+        'Samantha',
+        'Karen',
+        'Victoria',
+        'Ava (Premium)',
+        'Allison',
+        // Other good voices
+        'Alex',
+        'Fiona',
+        'Daniel'
+    ];
+    
+    // Find the best available voice
+    let selectedVoice = null;
+    
+    for (const prefName of voicePreferences) {
+        selectedVoice = voices.find(voice => 
+            voice.name.includes(prefName) && voice.lang.startsWith('en')
+        );
+        if (selectedVoice) break;
+    }
+    
+    // Fallback: Canadian or natural-sounding English voice
+    if (!selectedVoice) {
+        // Try Canadian first
+        selectedVoice = voices.find(voice => voice.lang.includes('CA') || voice.lang.includes('ca'));
+    }
+    
+    // Then try natural voices
+    if (!selectedVoice) {
+        selectedVoice = voices.find(voice => 
+            voice.lang.startsWith('en') && 
+            (voice.name.toLowerCase().includes('natural') ||
+             voice.name.toLowerCase().includes('premium') ||
+             voice.name.toLowerCase().includes('enhanced'))
+        );
+    }
+    
+    // Final fallback: Any English voice
+    if (!selectedVoice) {
+        selectedVoice = voices.find(voice => voice.lang.startsWith('en'));
+    }
+    
+    if (selectedVoice) {
+        utterance.voice = selectedVoice;
+        console.log('Using voice:', selectedVoice.name);
+    }
+    
+    // Speak the text
+    speechSynthesis.speak(utterance);
+}
+
+
+// Toggle speech on/off
+function toggleSpeech() {
+    speechEnabled = !speechEnabled;
+    const icon = document.getElementById('speech-icon');
+    if (icon) {
+        icon.textContent = speechEnabled ? '🔊' : '🔇';
+    }
+    
+    // Cancel any ongoing speech when disabling
+    if (!speechEnabled && speechSynthesis) {
+        speechSynthesis.cancel();
+    }
+    
+    // Show feedback
+    showToast(speechEnabled ? '🔊 Natural voice enabled' : '🔇 Voice disabled');
+    
+    // Log available voices for debugging
+    if (speechEnabled) {
+        const voices = speechSynthesis.getVoices();
+        console.log('Available voices:', voices.map(v => v.name + ' (' + v.lang + ')'));
+    }
+}
+
+// Load voices when they're ready
+if (speechSynthesis) {
+    speechSynthesis.onvoiceschanged = () => {
+        speechSynthesis.getVoices();
+    };
+}
+
+// Initialize Speech Recognition (Voice Input)
+function initializeSpeechRecognition() {
+    // Check for browser support
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    
+    if (!SpeechRecognition) {
+        console.log('Speech recognition not supported in this browser');
+        return;
+    }
+    
+    recognition = new SpeechRecognition();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = 'en-CA'; // Canadian English
+    
+    recognition.onstart = () => {
+        isListening = true;
+        updateMicButton();
+        showToast('🎤 Listening... Speak your question');
+    };
+    
+    recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        const input = document.getElementById('chat-input');
+        if (input) {
+            input.value = transcript;
+            // Automatically send the message
+            sendMessage();
+        }
+    };
+    
+    recognition.onerror = (event) => {
+        console.error('Speech recognition error:', event.error);
+        isListening = false;
+        updateMicButton();
+        
+        if (event.error === 'no-speech') {
+            showToast('No speech detected. Please try again.');
+        } else if (event.error === 'not-allowed') {
+            showToast('Microphone access denied. Please allow microphone access.');
+        } else {
+            showToast('Error: ' + event.error);
+        }
+    };
+    
+    recognition.onend = () => {
+        isListening = false;
+        updateMicButton();
+    };
+}
+
+// Start/Stop Voice Input
+function toggleVoiceInput() {
+    if (!recognition) {
+        showToast('Voice input not supported in this browser');
+        return;
+    }
+    
+    if (isListening) {
+        recognition.stop();
+    } else {
+        // Stop any ongoing speech output before listening
+        if (speechSynthesis) {
+            speechSynthesis.cancel();
+        }
+        recognition.start();
+    }
+}
+
+// Update microphone button appearance
+function updateMicButton() {
+    const micButton = document.getElementById('mic-button');
+    if (!micButton) return;
+    
+    if (isListening) {
+        micButton.classList.add('listening');
+        micButton.innerHTML = '🔴'; // Red dot when listening
+    } else {
+        micButton.classList.remove('listening');
+        micButton.innerHTML = '🎤'; // Microphone icon
     }
 }
 
