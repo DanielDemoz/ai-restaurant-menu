@@ -39,3 +39,14 @@ Optional: create `.env` with `OPENAI_API_KEY=your_key_here`.
 **Live demo:** https://danieldemoz.github.io/ai-restaurant-menu/
 
 Customize menu items in `server.js` (`menuData` object). See `QUICK_CUSTOMIZE.md` for a 5-minute setup guide.
+
+**DD Demo** — portfolio showcase by Daniel S. Demoz.
+
+## Contact
+
+Daniel S. Demoz  
+📧 Email: asbdansi9@gmail.com  
+📱 Phone: (437) 249-3308  
+🔗 LinkedIn: linkedin.com/in/daniel-s-demoz  
+💼 GitHub: github.com/DanielDemoz  
+🌐 Website: brukdconsultancy.com
