@@ -228,20 +228,20 @@ function setupEventListeners() {
 
 // Load Menu
 async function loadMenu() {
-    try {
-        // Try to fetch from server first
-        const response = await fetch('http://localhost:3000/api/menu');
-        if (response.ok) {
-            menuData = await response.json();
-            console.log('Menu loaded from server');
-        } else {
-            throw new Error('Server not available');
+    const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    if (isLocal) {
+        try {
+            const response = await fetch('http://localhost:3000/api/menu');
+            if (response.ok) {
+                menuData = await response.json();
+                renderMenu();
+                return;
+            }
+        } catch (error) {
+            console.log('Local server unavailable, using embedded menu');
         }
-    } catch (error) {
-        // Fallback to embedded data for standalone mode (GitHub Pages)
-        console.log('Using embedded menu data (standalone mode)');
-        menuData = embeddedMenuData;
     }
+    menuData = embeddedMenuData;
     renderMenu();
 }
 
